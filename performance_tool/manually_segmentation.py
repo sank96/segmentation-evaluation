@@ -1,28 +1,38 @@
-import argparse
+#!/usr/bin/env python3
 import json
 import cv2
 import numpy as np
 import os
 import sys
-sys.path.append(os.path.abspath('.'))
+import tkinter as tk
+from tkinter import messagebox
+
 sys.path.append(os.path.abspath('..'))
+sys.path.append(os.path.abspath('../..'))
 
 shape = []
 window_name = "Select the objects"
 original_image = None
 polygons = []
+root = tk.Tk()
+root.withdraw()
 
 
-def plot_shape():
+def plot_shape(saving=False):
     global shape, window_name
 
     image = get_image()
 
+    if saving:
+        color = (0, 0, 255)
+    else:
+        color = (0, 255, 0)
+
     if len(shape) == 1:
         point = shape[0]
-        cv2.circle(image, point, 3, (0, 255, 0), -1)
+        cv2.circle(image, point, 3, color, -1)
     elif len(shape) == 2:
-        cv2.line(image, shape[0], shape[1], (0, 255, 0), 2)
+        cv2.line(image, shape[0], shape[1], color, 2)
     elif len(shape) > 2:
         alpha = 0.3
 
@@ -30,10 +40,10 @@ def plot_shape():
 
         pts = np.asarray(shape)
         pts = pts.reshape((-1, 1, 2))
-        cv2.fillPoly(image, [pts], (0, 255, 0))
+        cv2.fillPoly(image, [pts], color)
         # apply the overlay
         cv2.addWeighted(image, alpha, im2, 1 - alpha, 0, image)
-        cv2.polylines(image, [pts], True, (0, 255, 0), 2)
+        cv2.polylines(image, [pts], True, color, 2)
 
     cv2.imshow(window_name, image)
 
@@ -58,7 +68,7 @@ def plot_all_polygons(pols: [dict], final=False):
         offset = 5
         cx -= round(len_label * offset)
         if final:
-            n = "{} - {}\n".format(i, pol['label'])
+            n = "{} - {}".format(i, pol['label'])
             cv2.putText(image, n, (cx, cy), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 255), 3)
         else:
             cv2.putText(image, pol['label'], (cx, cy), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 255), 3)
@@ -99,8 +109,15 @@ def get_image(original=False):
 def manually_segmentation():
     global original_image, shape
 
-    image_path = input('Insert the path to the image to segment:\n')
-    result_path = input('Insert the path to the folder in which save the segmentation:\n')
+    image_path = ''
+    image_path = '/Users/jarvis/Downloads/per_sank 2/cereali_little2.jpg'
+    while image_path == '':
+        image_path = input('Insert the path to the image to segment:\n')
+
+    result_path = ''
+    result_path = '/Users/jarvis/Downloads/per_sank 2'
+    while result_path == '':
+        result_path = input('Insert the path to the folder in which save the segmentation:\n')
 
     name, ext = os.path.splitext(os.path.basename(image_path))
 
@@ -120,6 +137,8 @@ def manually_segmentation():
     image = cv2.imread(image_path)
     original_image = image.copy()
     cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
+    # cv2.resizeWindow(window_name, 1600, 2560)
+    # cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_AUTOSIZE)
     cv2.setMouseCallback(window_name, shape_selection)
 
     while True:
@@ -141,8 +160,13 @@ def manually_segmentation():
         # if 's' is pressed, ask the label and save the polygon
         if key == ord('s'):
             if len(shape) >= 3:
+                plot_shape(saving=True)
+                cv2.waitKey(1)
+
                 for l in list_of_labes:
                     print(l)
+
+                messagebox.showinfo('Change window', 'Type the label of the object into the execution of the script')
 
                 label = input('Insert the label to assign to the object: ')
 

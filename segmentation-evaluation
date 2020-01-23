@@ -1,4 +1,5 @@
-import argparse
+#!/usr/bin/env/python3
+
 import traceback
 import os
 import sys
@@ -26,9 +27,11 @@ if __name__ == '__main__':
 
             if ans == '1':
                 ex = manually_segmentation()
+                pass
 
             elif ans == '2':
                 ex = evaluate_segmentation()
+                pass
 
             if not ex:
                 print('Something goes wrong, repeat!')

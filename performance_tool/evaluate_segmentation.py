@@ -1,9 +1,9 @@
 import json
 import os
 import sys
-sys.path.append(os.path.abspath('.'))
 sys.path.append(os.path.abspath('..'))
-from performance_polygons import CorrectPolygon, ToEvaluatePolygon
+sys.path.append(os.path.abspath('../..'))
+from performance_tool.performance_polygons import CorrectPolygon, ToEvaluatePolygon
 
 
 def claster_on_label(data: dict, correct):
@@ -28,9 +28,6 @@ def evaluate_segmentation():
     correct_segmentation_path = input('Insert the path to the json file of the manually segmented:\n')
     to_evaluate_segmentation_path = input('Insert the path to the json file of the segmentation to evaluate:\n')
     result_path = input('Insert the path to the folder in which save the evaluation:\n')
-
-    correct_polygons = {}
-    to_evaluate_polygons = {}
 
     with open(correct_segmentation_path) as json_file:
         data = json.load(json_file)
