@@ -1,12 +1,12 @@
-#!/usr/bin/env/python3
-
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 import traceback
 import os
 import sys
 sys.path.append(os.path.abspath('.'))
 sys.path.append(os.path.abspath('..'))
-from evaluate_segmentation import evaluate_segmentation
-from manually_segmentation import manually_segmentation
+from performance_tool.evaluate_segmentation import evaluate_segmentation
+from performance_tool.manually_segmentation import manually_segmentation
 
 line = '*' * 50
 menu = "\nPERFORMANCE TOOL\n" \
