@@ -1,2 +1,5 @@
 /venv/
 .idea/
+/segmentation_evaluation.egg-info/
+/dist/
+/build/
