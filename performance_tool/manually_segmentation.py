@@ -1,5 +1,10 @@
+"""
+The module gives all the functions used through the manually segmentation
+"""
 #!/usr/bin/env python3
 import json
+import traceback
+
 import cv2
 import numpy as np
 import os
@@ -18,7 +23,13 @@ root = tk.Tk()
 root.withdraw()
 
 
-def plot_shape(saving=False):
+def plot_shape(saving: bool = False):
+    """
+    The function takes care of print the points, line and polygons while the selection
+
+    :param saving: The parameters represent when print the polygons in saving mode (in red colors instead of green).
+    :type saving: bool
+    """
     global shape, window_name
 
     image = get_image()
@@ -49,6 +60,16 @@ def plot_shape(saving=False):
 
 
 def plot_all_polygons(pols: [dict], final=False):
+    """
+    The function plot all polygons into the image. If the function is called as final version the image is not shown,
+    otherwise it is printed into a window.
+
+    :param pols: A list containing all the polygon represented as a dictionary
+    :type pols: list
+    :param final: Parameter that represent when print the image and return or only return
+    :type final: bool
+    :return: Return the image on which all the polygons are printed
+    """
     global window_name
 
     image = get_image(original=True)
@@ -82,6 +103,15 @@ def plot_all_polygons(pols: [dict], final=False):
 
 # function to control event
 def shape_selection(event, x, y, flags, param):
+    """
+    The method is called when the required event is listen through openCV
+
+    :param event: Name of the event
+    :param x: Position x of the event
+    :param y: Position y of the event
+    :param flags: Not used parameter
+    :param param: Not used parametr
+    """
     global shape
     if event == cv2.EVENT_LBUTTONDBLCLK:
         shape.append((x, y))
@@ -89,7 +119,15 @@ def shape_selection(event, x, y, flags, param):
     plot_shape()
 
 
-def get_image(original=False):
+def get_image(original: bool = False):
+    """
+    The function return the image on which print the objects. If original is not provided the objects already segmented
+    are shown in light gray color.
+
+    :param original: The parameter specify when return the original image of the image with the already insert polygons.
+    :type original: bool
+    :return: The image required is return
+    """
     global polygons
 
     if original:
@@ -106,21 +144,35 @@ def get_image(original=False):
         return image
 
 
-def manually_segmentation():
+def manually_segmentation() -> bool:
+    """
+    The function asks the path of the image to segment and the folder in which saves the output json.
+
+    The output is a JSON structure in a dictionary. The key is an integer that represent uniquely the object segmented.
+    Each value are the vertices of the polygon used to segment the object.
+
+    :return: A bool value that check if all operations end correctly
+    :rtype: bool
+    """
     global original_image, shape
 
+    correct = False
     image_path = ''
-    image_path = '/Users/jarvis/Downloads/per_sank 2/cereali_little2.jpg'
-    while image_path == '':
+    while not correct:
         image_path = input('Insert the path to the image to segment:\n')
+        if os.path.exists(image_path) and os.path.isfile(image_path):
+            correct = True
 
+    correct = False
     result_path = ''
-    result_path = '/Users/jarvis/Downloads/per_sank 2'
-    while result_path == '':
+    while not correct:
         result_path = input('Insert the path to the folder in which save the segmentation:\n')
+        if os.path.exists(result_path) and os.path.isdir(result_path):
+            correct = True
 
     name, ext = os.path.splitext(os.path.basename(image_path))
 
+    print('DOUBLE CLICK to insert a point.\n')
     legend = "\nLEGEND:\n" \
              "{}: {}\n" \
              "{}: {}\n" \
@@ -133,13 +185,17 @@ def manually_segmentation():
 
     list_of_labes = []
 
-    # load the image, clone it, and setup the mouse callback function
-    image = cv2.imread(image_path)
-    original_image = image.copy()
-    cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
-    # cv2.resizeWindow(window_name, 1600, 2560)
-    # cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_AUTOSIZE)
-    cv2.setMouseCallback(window_name, shape_selection)
+    try:
+        # load the image, clone it, and setup the mouse callback function
+        image = cv2.imread(image_path)
+        original_image = image.copy()
+        cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
+        # cv2.resizeWindow(window_name, 1600, 2560)
+        # cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_AUTOSIZE)
+        cv2.setMouseCallback(window_name, shape_selection)
+    except:
+        traceback.print_exc()
+        return False
 
     while True:
         plot_shape()
@@ -166,9 +222,11 @@ def manually_segmentation():
                 for l in list_of_labes:
                     print(l)
 
-                messagebox.showinfo('Change window', 'Type the label of the object into the execution of the script')
+                messagebox.showinfo('Insert label', 'Go back to terminal and insert the label of the selected object')
 
                 label = input('Insert the label to assign to the object: ')
+                print('Go back to the image and continue to select another objects')
+                print("'u':undo, 'c':clear, 's':save, 'q':quit\n")
 
                 polygon = {'label': label, 'points': shape}
                 polygons.append(polygon)
@@ -178,8 +236,7 @@ def manually_segmentation():
     # close all open windows
     cv2.destroyAllWindows()
 
-    print("\nLEGEND:\n"
-          "{}: {}\n".format('q', 'Close window'))
+    print("\nReturn to the image and click q to close the window and terminate the process\n")
     cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
     plot_all_polygons(polygons)
 

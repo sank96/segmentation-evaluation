@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="segmentation-evaluation",
-    version="1.0",
+    version="1.0.3",
     scripts=['segmentation-evaluation'],
     author="Mattia Sanchioni, Alessandro Concetti",
     author_email="mattia.sanchioni.dev@gmail.com, ale.concetti@gmail.com",
@@ -14,7 +14,9 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/mett96/segmentation-evaluation",
-    install_requires=['numpy', 'Shapely', 'opencv-contrib-python==3.4.2.17'],
+    install_requires=['numpy',
+                      'Shapely',
+                      'opencv-contrib-python==3.4.2.17'],
     packages=setuptools.find_packages(),
     license="GPLv3",
     classifiers=[

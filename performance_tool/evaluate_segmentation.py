@@ -1,3 +1,6 @@
+"""
+The package contains all the functions used to evaluate the segmentation
+"""
 import json
 import os
 import sys
@@ -6,9 +9,22 @@ sys.path.append(os.path.abspath('../..'))
 from performance_tool.performance_polygons import CorrectPolygon, ToEvaluatePolygon
 
 
-def claster_on_label(data: dict, correct):
+def claster_on_label(data: dict, correct: bool) -> dict:
+    """
+    Given the dictionary with all the polygons serialized return another dictionary in which keys are the distinct
+    labels of the input data.
+    The value of each key is a list of polygon object. They are two different object depends on the input data collects
+    the correct objects or objects to evaluate.
+
+    :param data: The dictionary contains all polygons serialized
+    :type data: dict
+    :param correct: The value that represent if the input data are the correct polygons or polygons to check
+    :type correct: bool
+    :return: Polygons clustered on the label name. Dictionary with keys distinct labels
+    :rtype: dict
+    """
     polygons = {}
-    for k, v in data.items():
+    for _, v in data.items():
         if correct:
             p = CorrectPolygon(v)
         else:
@@ -24,10 +40,37 @@ def claster_on_label(data: dict, correct):
     return polygons
 
 
-def evaluate_segmentation():
-    correct_segmentation_path = input('Insert the path to the json file of the manually segmented:\n')
-    to_evaluate_segmentation_path = input('Insert the path to the json file of the segmentation to evaluate:\n')
-    result_path = input('Insert the path to the folder in which save the evaluation:\n')
+def evaluate_segmentation() -> bool:
+    """
+    The function ask for the two json file to match.
+
+    The structure of the JSON must be a dictionary as key an increment number that represent uniquely an object.
+    The value is another dictionary with two key *label* (the name of the template) and *points* (a list of float).
+
+    :return: A bool value that check if all operations end correctly
+    :rtype: bool
+    """
+    correct = False
+    correct_segmentation_path = ''
+    while not correct:
+        correct_segmentation_path = input('Insert the path to the json file of the manually segmented:\n')
+        if os.path.exists(correct_segmentation_path) and os.path.isfile(correct_segmentation_path):
+            correct = True
+
+    correct = False
+    to_evaluate_segmentation_path = ''
+    while not correct:
+        correct_segmentation_path = input('Insert the path to the json file of the manually segmented:\n')
+        to_evaluate_segmentation_path = input('Insert the path to the json file of the segmentation to evaluate:\n')
+        if os.path.exists(to_evaluate_segmentation_path) and os.path.isfile(to_evaluate_segmentation_path):
+            correct = True
+
+    correct = False
+    result_path = ''
+    while not correct:
+        result_path = input('Insert the path to the folder in which save the evaluation:\n')
+        if os.path.exists(result_path) and os.path.isdir(result_path):
+            correct = True
 
     with open(correct_segmentation_path) as json_file:
         data = json.load(json_file)
