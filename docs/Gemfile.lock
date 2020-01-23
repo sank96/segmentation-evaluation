@@ -149,6 +149,8 @@ GEM
     jekyll-theme-cayman (0.1.1)
       jekyll (~> 3.5)
       jekyll-seo-tag (~> 2.0)
+    jekyll-theme-cayman-blog (0.0.6)
+      jekyll (~> 3.3)
     jekyll-theme-dinky (0.1.1)
       jekyll (~> 3.5)
       jekyll-seo-tag (~> 2.0)
@@ -244,7 +246,7 @@ PLATFORMS
 DEPENDENCIES
   github-pages (~> 203)
   jekyll-feed (~> 0.6)
-  minima (~> 2.0)
+  jekyll-theme-cayman-blog
   tzinfo-data
 
 BUNDLED WITH
