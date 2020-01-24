@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="segmentation-evaluation",
-    version="1.0.3",
+    version="1.0.4",
     scripts=['segmentation-evaluation'],
     author="Mattia Sanchioni, Alessandro Concetti",
     author_email="mattia.sanchioni.dev@gmail.com, ale.concetti@gmail.com",
