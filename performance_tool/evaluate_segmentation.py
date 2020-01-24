@@ -53,14 +53,14 @@ def evaluate_segmentation() -> bool:
     correct = False
     correct_segmentation_path = ''
     while not correct:
-        correct_segmentation_path = input('Insert the path to the json file of the manually segmented:\n')
+        correct_segmentation_path = input('Insert the path to the json file of the manually segmentation (ground '
+                                          'truth):\n')
         if os.path.exists(correct_segmentation_path) and os.path.isfile(correct_segmentation_path):
             correct = True
 
     correct = False
     to_evaluate_segmentation_path = ''
     while not correct:
-        correct_segmentation_path = input('Insert the path to the json file of the manually segmented:\n')
         to_evaluate_segmentation_path = input('Insert the path to the json file of the segmentation to evaluate:\n')
         if os.path.exists(to_evaluate_segmentation_path) and os.path.isfile(to_evaluate_segmentation_path):
             correct = True
