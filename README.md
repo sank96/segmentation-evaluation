@@ -125,4 +125,4 @@ The tool was written by:
 - Alessandro Concetti    [![](images/GitHub-Mark-16px.png)](https://github.com/AleConcetti)
 
 ## License
-This project is under the GPL-3.0 license - see the [LICENSE.md](LICENSE.md) file for more details    
+This project is under the GPL-3.0 license - see the [LICENSE](LICENSE) file for more details    
