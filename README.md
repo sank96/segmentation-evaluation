@@ -37,11 +37,11 @@ $ segmentation-evaluation
 ```
 
 After that a printed menu is shown:
->**************************************************
+>
 >PERFORMANCE TOOL
 >1) Press 1 to manually segment the image
 >2) Press 2 to evaluate programmatically segmentation
->**************************************************
+>
 
 In order to exit from the menu press `ctrl + c`.
 
