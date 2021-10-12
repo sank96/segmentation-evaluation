@@ -16,7 +16,7 @@ setuptools.setup(
     url="https://github.com/mett96/segmentation-evaluation",
     install_requires=['numpy',
                       'Shapely',
-                      'opencv-contrib-python==3.4.2.17'],
+                      'opencv-contrib-python==3.4.7.28'],
     packages=setuptools.find_packages(),
     license="GPLv3",
     classifiers=[
